@@ -1,0 +1,106 @@
+@charset "utf-8";
+
+// Define defaults for each variable.
+
+$base-font-family: 'Nanum Gothic Coding', sans-serif;
+$base-font-size:   16px !default;
+$base-font-weight: 400 !default;
+$small-font-size:  $base-font-size * 0.875 !default;
+$base-line-height: 1.5 !default;
+
+$spacing-unit:     20px !default;
+
+$text-color:       #111 !default;
+$background-color: #fdfdfd !default;
+$brand-color:      #2a7ae2 !default;
+
+$grey-color:       #828282 !default;
+$grey-color-light: lighten($grey-color, 40%) !default;
+$grey-color-dark:  darken($grey-color, 25%) !default;
+
+$table-text-align: left !default;
+
+// Width of the content area
+$content-width:    800px !default;
+
+$on-palm:          600px !default;
+$on-laptop:        800px !default;
+
+// Use media queries like this:
+// @include media-query($on-palm) {
+//   .wrapper {
+//     padding-right: $spacing-unit / 2;
+//     padding-left: $spacing-unit / 2;
+//   }
+// }
+@mixin media-query($device) {
+  @media screen and (max-width: $device) {
+    @content;
+  }
+}
+
+@mixin relative-font-size($ratio) {
+  font-size: $base-font-size * $ratio;
+}
+
+// Import partials.
+@import
+  "minima/base",
+  "minima/layout",
+  "minima/syntax-highlighting"
+;
+
+// Customize
+.site-footer {
+  border-top: 4px solid $grey-color-light;
+  padding: $spacing-unit 0;
+}
+
+.post-link {
+  display: inline;
+  padding-left: 30px;
+}
+
+.search-results-container {
+  padding-top: 10px;
+}
+
+#search-results {
+  list-style: none;
+}
+
+#search-input {
+  padding: 10px;
+  width: 100%;
+  // border-width:0;
+  box-sizing : border-box;
+  font-size: $base-font-size
+}
+
+.horizontal-line {
+  padding: 10px 0;
+}
+
+.post-list {
+  margin-left: 20px;
+
+  > li {
+    margin-bottom: 0;
+  }
+}
+
+body {
+  overflow: overlay;
+}
+
+.post-list-heading {
+  font-size: 20px;
+}
+
+.post-meta {
+  font-size: 16px;
+}
+
+.post-link {
+  font-size: 16px;
+}

@@ -1,0 +1,70 @@
+---
+layout: post
+title: "Input 태그의 너비 100%는 왜 삐져나오지?"
+date: 2018-07-16 15:10:00 +0900
+categories: programming
+tags: [web, javascript]
+---
+> input 태그를 사용할 때 너비를 100% 로 할때 좌우 여백이 동일하게 출력되게 하기.
+
+나는 html 상에서 입력 칸을 만들기 위해 `input` 태그를 사용해보았어.
+
+그냥 div 안에 `input` 태그를 사용했더니 입력 칸이 꽉 차게 나오지 않아서 CSS 에 너비를 100% 로 조정했어. 코드는 다음과 같아.
+```html
+<!-- HTML -->
+<div class="search-container">
+  <input type="text" class="search-input" placeholder="검색어를 입력해주세요.">
+</div>
+```
+```css
+/* CSS */
+.search-container {
+  background-color: coral;
+  padding: 10px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 5px;
+  border: 3px solid black;
+  background-color: lime;
+}
+```
+
+그런데 뭔가 이상하게 중앙 정렬이 되지 않는거야. 그림처럼 좌우 여백이 동일하지 않은 거지.
+
+![Input box not centerize.]({{ "/assets/2019-07-16-input_box-01.jpg" | absolute_url }})
+
+이런 간단한 부분에서 문제를 겪을 줄 몰라 당황했어.
+
+일단 여러가지 실험을 해봤는데 좌우 여백이 동일하도록 유지하면서 입력 칸의 너비를 꽉 차게 보이도록 하려면 다음과 같이 입력칸의 `padding`, `border-width` 모두 0 으로 해야 된다는 사실을 발견했어.
+```css
+/* CSS */
+.search-input {
+  width: 100%;
+  padding: 0;
+  border-width: 0;
+  background-color: lime;
+}
+```
+
+왜지! `padding` 과 `border-width` 가 최대 너비에 영향을 주는 이유는?
+
+일단 나는 이곳 저곳에 검색을 해보고 실험하여 다음 옵션을 추가하면 문제가 해결된다는 사실을 발견했어.
+```css
+/* CSS */
+.search-input {
+  box-sizing : border-box;
+}
+```
+![Input box centerize.]({{ "/assets/2019-07-16-input_box-02.jpg" | absolute_url }})
+
+결국 문제는 `border` 인 거야.
+
+CSS 에서 `border` 는 기본적으로 바깥쪽으로 생성되. (포토샵을 많이 해본 사람은 알거야. 외곽선은 객체 외곽을 기준으로 inner, outer, middle 로 넣을 수 있다는 것을..) 이때 외곽선 너비가 입력 칸 너비에 포함되는 거야. 이 부분이 처음에는 이상하다고 생각했지만 바깥 쪽으로 생성되는 외곽선을 너비에 포함시키지 않는 경우 외곽선이 굵을 때 근처의 요소들을 덮어 버리는 문제가 발생할 수 있을거야. 다만 `padding`, `margin` 은 왜 너비에 포함시키는지 잘 모르겠어;;
+
+결국 명확하고 간단한 솔루션은 외곽선을 안으로 생성시키는 `border-box` 가 되는 거지. `box-sizing: border-box` 로 변경하면 `padding`, `margin` 도 다음 그림처럼 너비에 포함되지 않아.
+
+직접 실험해보고 싶으면 JSFiddle >> JSFiddle >> <a href="https://jsfiddle.net/binarydiver/jfab6kht/" target="_blank">좌우 여백 동일하게 입력칸 최대로 맞추기</a> 에서 해봐.
+
+`border-box` 자체에 대해 더 자세히 알고 싶어? 그럼 [MDN 문서](https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing) 로 가야지.
