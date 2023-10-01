@@ -1,0 +1,36 @@
+{
+  "name": "template-nextjs-blog",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://binarydiver.github.io/template-nextjs-blog",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "predeploy": "pnpm run build && touch out/.nojekyll",
+    "deploy": "gh-pages -t -d out"
+  },
+  "dependencies": {
+    "@markdoc/markdoc": "^0.2.2",
+    "@markdoc/next.js": "^0.2.3",
+    "eslint": "^8.50.0",
+    "eslint-config-next": "^13.5.3",
+    "glob-promise": "^6.0.5",
+    "gray-matter": "^4.0.3",
+    "next": "^13.5.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^4.9.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.10",
+    "@types/node": "^18.18.0",
+    "@types/react": "^18.2.23",
+    "@types/react-dom": "^18.2.8",
+    "autoprefixer": "^10.4.16",
+    "gh-pages": "^6.0.0",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.3"
+  }
+}
