@@ -1,5 +1,3 @@
-# Template for Blog with Next.js
+# Jason's blog
 
-Next.js + Tailwind CSS + Markdoc
-
-`npm run deploy` for publish github page.
+Blog based on next.js, tailwindcss, markdoc.

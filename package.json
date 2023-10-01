@@ -1,8 +1,8 @@
 {
-  "name": "template-nextjs-blog",
+  "name": "blog",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://binarydiver.github.io/template-nextjs-blog",
+  "homepage": "https://binarydiver.github.io/blog",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
