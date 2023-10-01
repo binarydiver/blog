@@ -53,8 +53,8 @@ export default function Home({
   return (
     <>
       <Head>
-        <title>Next.js Blog Template</title>
-        <meta name="description" content="Next.js Blog Template Website" />
+        <title>binarydiver</title>
+        <meta name="description" content="Jason's Blog" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href={`${assetPrefix}/favicon.ico`} />
       </Head>

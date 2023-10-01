@@ -9,7 +9,7 @@ type LayoutProps = {
 const Layout: FC<LayoutProps> = ({ children }) => {
   return (
     <>
-      <Navigation title="The Blog Title" />
+      <Navigation title="binarydiver" />
       <main className="max-w-5xl mx-auto prose dark:prose-invert">
         {children}
       </main>
