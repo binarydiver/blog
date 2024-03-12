@@ -19,7 +19,7 @@
       "request": "launch",
       "command": "npm run dev",
       "serverReadyAction": {
-        "pattern": "started server on .+, url: (https?://.+)",
+        "pattern": "(https?://.+)",
         "uriFormat": "%s",
         "action": "debugWithChrome"
       }

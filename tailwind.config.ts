@@ -9,7 +9,7 @@ export default {
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
   ],
-  darkMode: ['class'],
+  darkMode: 'selector',
   theme: {
     extend: {
       fontFamily: {

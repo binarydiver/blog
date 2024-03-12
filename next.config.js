@@ -9,9 +9,9 @@ const nextConfig = {
   },
   pageExtensions: ['md', 'mdoc', 'js', 'jsx', 'ts', 'tsx'],
   reactStrictMode: true,
-  publicRuntimeConfig: {
-    assetPrefix: isProd ? '/template-nextjs-blog' : '',
-  },
+  // publicRuntimeConfig: {
+  //   assetPrefix: isProd ? '/template-nextjs-blog' : '',
+  // },
 };
 
 const withMarkdoc = require('@markdoc/next.js');
