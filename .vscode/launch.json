@@ -18,10 +18,16 @@
       "type": "node-terminal",
       "request": "launch",
       "command": "npm run dev",
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**",
+        "!**/.next/**"
+      ],
       "serverReadyAction": {
         "pattern": "(https?://.+)",
         "uriFormat": "%s",
-        "action": "debugWithChrome"
+        "action": "debugWithChrome",
+        "killOnServerStop": true
       }
     }
   ]
