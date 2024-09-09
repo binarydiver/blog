@@ -1,5 +1,5 @@
 import fs from 'fs';
-import glob from 'glob-promise';
+import { glob } from 'glob';
 import matter from 'gray-matter';
 import getConfig from 'next/config';
 import Head from 'next/head';
