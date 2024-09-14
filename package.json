@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "predeploy": "pnpm run build && touch out/.nojekyll",
+    "predeploy": "pnpm run build && touch out/.nojekyll && echo \"blog.binarydiver.com\" > out/CNAME",
     "deploy": "gh-pages -t -d out"
   },
   "dependencies": {
