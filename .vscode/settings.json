@@ -2,9 +2,16 @@
   "cSpell.enableFiletypes": ["!json", "!yaml"],
   "cSpell.words": [
     "binarydiver",
+    "frontmatter",
+    "Giscus",
+    "markdoc",
     "nextjs",
+    "nosniff",
     "Noto",
     "tailwindcss",
     "unoptimized"
-  ]
+  ],
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  }
 }

@@ -1,87 +1,108 @@
+import FastGlob from 'fast-glob';
 import fs from 'fs';
-import { glob } from 'glob';
 import matter from 'gray-matter';
-import getConfig from 'next/config';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { GetStaticProps, InferGetStaticPropsType } from 'next/types';
+import { GetStaticProps } from 'next/types';
 import path from 'path';
+import { BLOG_TITLE } from './_lib/constants';
+import generateRssFeed from './_lib/rss';
 
-const assetPrefix = getConfig().publicRuntimeConfig?.assertPrefix ?? '';
-
-type Article = {
+export type ArticleMatter = {
   title: string;
   description: string;
-  cover: string | null;
+  coverImagePath: string | null;
   slug: string;
-  writeAt: string;
+  writtenAt: string;
+  updatedAt: string;
 };
 
-export const getStaticProps: GetStaticProps<{
-  articles: Article[];
-}> = async () => {
-  const ARTICLES_DIR = path.join(process.cwd(), 'pages/articles');
-  const articlesPaths = await glob('**/*.md', { cwd: ARTICLES_DIR });
-  const articles = articlesPaths.map(articlePath => {
-    const slug = path.basename(articlePath, path.extname(articlePath));
+type HomeProps = {
+  articleMatters: ArticleMatter[];
+};
+
+export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+  const ARTICLES_DIR = path.join(process.cwd(), 'pages');
+  const articlesPaths = await FastGlob.glob('articles/**/*.md', {
+    cwd: ARTICLES_DIR,
+    dot: false,
+    onlyFiles: true,
+  });
+  const articleMatters = articlesPaths.map(articlePath => {
+    const articlePathElements = path.parse(articlePath);
+    const slug = articlePath.slice(0, -1 * articlePathElements.ext.length);
     const source = fs.readFileSync(
-      path.join(process.cwd(), 'pages/articles', articlePath),
+      path.join(process.cwd(), 'pages/', articlePath),
       'utf8'
     );
     const { data } = matter(source);
-    const { title, description, cover, writeAt } = data;
+    const { title, description, coverImageName, writtenAt, updatedAt } = data;
 
     return {
       title,
       description,
-      cover: cover ?? null,
+      coverImagePath: coverImageName ? `./${slug}/${coverImageName}` : null,
       slug,
-      writeAt,
+      writtenAt,
+      updatedAt,
     };
   });
+  articleMatters.sort().reverse();
+
+  generateRssFeed(articleMatters);
+
   return {
     props: {
-      articles,
+      articleMatters,
     },
   };
 };
+6;
+const Home = (props: HomeProps) => {
+  const { articleMatters } = props;
 
-export default function Home({
-  articles,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
       <Head>
-        <title>binarydiver</title>
-        <meta name="description" content="Jason's Blog" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href={`${assetPrefix}/favicon.ico`} />
+        <title>{BLOG_TITLE}</title>
+        <meta name="description" content="This is Jason's personal blog." />
       </Head>
 
-      <ul
-        role="list"
-        className="divide-y divide-slate-400 list-none marker:text-slate-300"
-      >
-        {articles.map(article => (
-          <li key={article.slug} className="pt-2">
-            <Link className="no-underline" href={`/articles/${article.slug}`}>
-              <header className="underline underline-offset-4">
-                {article.cover && (
-                  <Image
-                    src={article.cover}
-                    width={300}
-                    height={200}
-                    alt="cover"
-                  />
-                )}
-                {article.writeAt}, {article.title}
-              </header>
-              <p>{article.description}</p>
-            </Link>
+      <ul role="list" className="divide-y list-none my-2 pe-[1.625rem]">
+        {articleMatters.map(articleMatter => (
+          <li className="m-0" key={articleMatter.writtenAt}>
+            <article className="flex gap-x-4 py-4">
+              <div>
+                <Link className="no-underline" href={`${articleMatter.slug}`}>
+                  {articleMatter.coverImagePath && (
+                    <Image
+                      className="m-0"
+                      src={articleMatter.coverImagePath}
+                      width={200}
+                      height={200}
+                      alt="cover image"
+                    />
+                  )}
+                </Link>
+              </div>
+              <div>
+                <Link className="no-underline" href={`${articleMatter.slug}`}>
+                  <header className="underline underline-offset-4">
+                    {articleMatter.writtenAt.substring(0, 10)} ::{' '}
+                    {articleMatter.title}
+                  </header>
+                </Link>
+                <p className="mt-2 mb-0">{articleMatter.description}</p>
+              </div>
+            </article>
           </li>
         ))}
       </ul>
     </>
   );
-}
+};
+
+export default Home;
+
+export const revalidate = 3600;
