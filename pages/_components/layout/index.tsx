@@ -18,7 +18,7 @@ const Layout: FC<LayoutProps> = props => {
         <title>{title}</title>
       </Head>
       <Header title={BLOG_TITLE} />
-      <main className="max-w-screen-lg mx-auto w-full p-4">{children}</main>
+      <main className="max-w-screen-lg mx-auto w-full py-4">{children}</main>
       <Footer />
     </div>
   );
