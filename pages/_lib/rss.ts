@@ -23,6 +23,7 @@ const generateRssFeed = async (articleMatters: ArticleMatter[]) => {
   // Add each individual post to the feed.
   articleMatters.map(articleMatter => {
     feed.item({
+      author: 'Jason Park',
       title: articleMatter.title,
       description: articleMatter.description,
       url: `${siteOrigin}/${articleMatter.slug}`,
