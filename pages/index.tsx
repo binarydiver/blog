@@ -29,6 +29,9 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
     dot: false,
     onlyFiles: true,
   });
+
+  articlesPaths.sort().reverse();
+
   const articleMatters = articlesPaths.map(articlePath => {
     const articlePathElements = path.parse(articlePath);
     const slug = articlePath.slice(0, -1 * articlePathElements.ext.length);
@@ -48,7 +51,6 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
       updatedAt,
     };
   });
-  articleMatters.sort().reverse();
 
   generateRssFeed(articleMatters);
 
@@ -73,15 +75,16 @@ const Home = (props: HomeProps) => {
         {articleMatters.map(articleMatter => (
           <li className="m-0" key={articleMatter.writtenAt}>
             <article className="flex py-4">
-              <div>
+              <div className="me-4">
                 <Link className="no-underline" href={`${articleMatter.slug}`}>
                   {articleMatter.coverImagePath && (
                     <Image
-                      className="m-0 me-4"
+                      className="m-0"
                       src={articleMatter.coverImagePath}
                       width={200}
                       height={200}
                       alt="cover image"
+                      priority={true}
                     />
                   )}
                 </Link>
