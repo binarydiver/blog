@@ -1,0 +1,1 @@
+(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[518],{1416:function(n,_,o){(window.__NEXT_P=window.__NEXT_P||[]).push(["/_components/article-layout/footer",function(){return o(974)}])}},function(n){n.O(0,[888,774,179],function(){return n(n.s=1416)}),_N_E=n.O()}]);

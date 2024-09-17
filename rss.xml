@@ -9,9 +9,17 @@
             <link>https://blog.binarydiver.com</link>
         </image>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Sat, 14 Sep 2024 11:18:35 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 17 Sep 2024 08:53:03 GMT</lastBuildDate>
         <atom:link href="https://blog.binarydiver.com/rss.xml" rel="self" type="application/rss+xml"/>
-        <pubDate>Sat, 14 Sep 2024 11:18:35 GMT</pubDate>
+        <pubDate>Tue, 17 Sep 2024 08:53:03 GMT</pubDate>
         <copyright><![CDATA[Copyright 2024, Jason Park]]></copyright>
+        <item>
+            <title><![CDATA[Next.js로 GitHub Page에 블로그 개설하기]]></title>
+            <description><![CDATA[Next.js로 정적 웹사이트를 추출하여 GitHub Page 위에서 운영할 수 있는 블로그를 개설한 과정에 대한 이야기이다.]]></description>
+            <link>https://blog.binarydiver.com/articles/2024/09/14/build_blog_with_nextjs_on_github</link>
+            <guid isPermaLink="true">https://blog.binarydiver.com/articles/2024/09/14/build_blog_with_nextjs_on_github</guid>
+            <dc:creator><![CDATA[Jason Park]]></dc:creator>
+            <pubDate>Sun, 15 Sep 2024 00:00:00 GMT</pubDate>
+        </item>
     </channel>
 </rss>
