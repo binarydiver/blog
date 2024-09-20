@@ -1,4 +1,4 @@
-import rssIcon from '@/public/rss-512.png';
+import rssIcon from '@public/rss-512.png';
 import Image from 'next/image';
 import Link from 'next/link';
 

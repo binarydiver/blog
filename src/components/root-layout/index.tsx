@@ -12,7 +12,7 @@ const RootLayout: FC<RootLayoutProps> = props => {
   const { children } = props;
 
   return (
-    <div className={`${notoSansKr.className}`}>
+    <div className={notoSansKr.className}>
       <Head>
         <link rel="icon" type="image/x-icon" href={`/favicon.ico`} />
 

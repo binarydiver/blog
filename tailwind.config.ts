@@ -1,16 +1,15 @@
 import typography from '@tailwindcss/typography';
 import type { Config } from 'tailwindcss';
-import defaultTheme from 'tailwindcss/defaultTheme';
 
 export default {
-  content: ['./pages/**/*.{ts,tsx}'],
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
   darkMode: 'selector',
   theme: {
     extend: {
-      fontFamily: {
-        sans: ['Noto Sans KR', ...defaultTheme.fontFamily.sans],
-        serif: ['Noto Serif KR', ...defaultTheme.fontFamily.serif],
-      },
       typography: {
         DEFAULT: {
           css: {

@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren } from 'react';
-import { BLOG_TITLE } from '../../_lib/constants';
+import { BLOG_TITLE } from '../../lib/constants';
 import Footer from './footer';
 import Header from './header';
 

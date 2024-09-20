@@ -1,13 +1,11 @@
 import FastGlob from 'fast-glob';
 import fs from 'fs';
 import matter from 'gray-matter';
-import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { GetStaticProps } from 'next/types';
 import path from 'path';
-import { BLOG_TITLE } from './_lib/constants';
-import generateRssFeed from './_lib/rss';
+import generateRssFeed from '../lib/rss';
 
 export type ArticleMatter = {
   title: string;
@@ -24,11 +22,14 @@ type HomeProps = {
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const ARTICLES_DIR = path.join(process.cwd(), 'pages');
-  const articlesPaths = await FastGlob.glob('articles/**/*.md', {
-    cwd: ARTICLES_DIR,
-    dot: false,
-    onlyFiles: true,
-  });
+  const articlesPaths = await FastGlob.glob(
+    ['articles/**/*.md', '!articles/_draft/**'],
+    {
+      cwd: ARTICLES_DIR,
+      dot: false,
+      onlyFiles: true,
+    }
+  );
 
   articlesPaths.sort().reverse();
 
@@ -66,11 +67,6 @@ const Home = (props: HomeProps) => {
 
   return (
     <>
-      <Head>
-        <title>{BLOG_TITLE}</title>
-        <meta name="description" content="This is Jason's personal blog." />
-      </Head>
-
       <ul role="list" className="divide-y list-none my-2 ps-1 pe-1">
         {articleMatters.map(articleMatter => (
           <li className="m-0" key={articleMatter.writtenAt}>
@@ -107,5 +103,3 @@ const Home = (props: HomeProps) => {
 };
 
 export default Home;
-
-export const revalidate = 3600;
