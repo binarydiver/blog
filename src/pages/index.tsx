@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { GetStaticProps } from 'next/types';
 import path from 'path';
 import generateRssFeed from '../lib/rss';
+import generateSitemap from '../lib/sitemap';
 
 export type ArticleMatter = {
   title: string;
@@ -54,6 +55,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   });
 
   generateRssFeed(articleMatters);
+  generateSitemap(articleMatters);
 
   return {
     props: {
