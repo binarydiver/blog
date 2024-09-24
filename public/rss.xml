@@ -2,16 +2,24 @@
     <channel>
         <title><![CDATA[Jason's Wisdom | RSS Feed]]></title>
         <description><![CDATA[This is Jason's personal blog.]]></description>
-        <link>https://blog.binarydiver.com</link>
+        <link>http://localhost:3000</link>
         <image>
-            <url>https://blog.binarydiver.com/rss-512.png</url>
+            <url>http://localhost:3000/rss-512.png</url>
             <title>Jason&apos;s Wisdom | RSS Feed</title>
-            <link>https://blog.binarydiver.com</link>
+            <link>http://localhost:3000</link>
         </image>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Fri, 20 Sep 2024 06:12:44 GMT</lastBuildDate>
-        <atom:link href="https://blog.binarydiver.com/rss.xml" rel="self" type="application/rss+xml"/>
-        <pubDate>Fri, 20 Sep 2024 06:12:44 GMT</pubDate>
+        <lastBuildDate>Tue, 24 Sep 2024 08:43:49 GMT</lastBuildDate>
+        <atom:link href="http://localhost:3000/rss.xml" rel="self" type="application/rss+xml"/>
+        <pubDate>Tue, 24 Sep 2024 08:43:49 GMT</pubDate>
         <copyright><![CDATA[Copyright 2024, Jason Park]]></copyright>
+        <item>
+            <title><![CDATA[Next.js로 GitHub Page에 블로그 개설하기]]></title>
+            <description><![CDATA[Next.js로 정적 웹사이트를 추출하여 GitHub Page 위에서 운영할 수 있는 블로그를 개설한 과정에 대한 이야기이다.]]></description>
+            <link>http://localhost:3000/articles/2024/09/24/build-blog-with-nextjs-on-github</link>
+            <guid isPermaLink="true">http://localhost:3000/articles/2024/09/24/build-blog-with-nextjs-on-github</guid>
+            <dc:creator><![CDATA[Jason Park]]></dc:creator>
+            <pubDate>Tue, 24 Sep 2024 08:40:00 GMT</pubDate>
+        </item>
     </channel>
 </rss>
