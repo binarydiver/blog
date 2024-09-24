@@ -12,7 +12,7 @@ const nextConfig = {
   },
   output: 'export',
   reactStrictMode: true,
-  ...withMarkdoc({ mode: 'static' })({
+  ...withMarkdoc({ mode: 'static', schemaPath: 'src/markdoc' })({
     pageExtensions: ['md', 'mdoc', 'jsx', 'tsx'],
   }),
   trailingSlash: true,
