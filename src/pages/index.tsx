@@ -22,11 +22,11 @@ type HomeProps = {
 };
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-  const ARTICLES_DIR = path.join(process.cwd(), 'pages');
+  const PAGES_DIR = path.join(process.cwd(), 'src/pages');
   const articlesPaths = await FastGlob.glob(
-    ['articles/**/*.md', '!articles/_draft/**'],
+    ['articles/**/*.md', '!articles/_draft/*'],
     {
-      cwd: ARTICLES_DIR,
+      cwd: PAGES_DIR,
       dot: false,
       onlyFiles: true,
     }
@@ -38,7 +38,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
     const articlePathElements = path.parse(articlePath);
     const slug = articlePath.slice(0, -1 * articlePathElements.ext.length);
     const source = fs.readFileSync(
-      path.join(process.cwd(), 'pages/', articlePath),
+      path.join(process.cwd(), 'src/pages/', articlePath),
       'utf8'
     );
     const { data } = matter(source);
