@@ -1,3 +1,3 @@
-# Jason's blog
+# Jason's Wisdom
 
-Blog based on next.js, tailwindcss, markdoc.
+Personal blog based on next.js, tailwindcss, markdoc.
