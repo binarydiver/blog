@@ -5,7 +5,7 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head />
-      <body className="antialiased bg-zinc-100 prose prose-zinc dark:bg-zinc-950 dark:prose-invert max-w-full">
+      <body className="antialiased break-keep bg-zinc-100 prose prose-zinc dark:bg-zinc-950 dark:prose-invert max-w-full">
         <Main />
         <NextScript />
         <Script src="/scripts/theme.js" strategy="beforeInteractive" />
