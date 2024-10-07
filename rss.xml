@@ -9,17 +9,25 @@
             <link>https://blog.binarydiver.com</link>
         </image>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Tue, 24 Sep 2024 08:45:06 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 07 Oct 2024 12:04:06 GMT</lastBuildDate>
         <atom:link href="https://blog.binarydiver.com/rss.xml" rel="self" type="application/rss+xml"/>
-        <pubDate>Tue, 24 Sep 2024 08:45:06 GMT</pubDate>
+        <pubDate>Mon, 07 Oct 2024 12:04:06 GMT</pubDate>
         <copyright><![CDATA[Copyright 2024, Jason Park]]></copyright>
+        <item>
+            <title><![CDATA[위키피디아의 Appearance UI에 대한 생각]]></title>
+            <description><![CDATA[위키피디아에 추가된 beta 기능인 Appearance UI에 대해 느낀 바를 공유하고 간단하게 구현해보았다.]]></description>
+            <link>https://blog.binarydiver.com/articles/2024/09/25/appearance-feature-from-wikipedia</link>
+            <guid isPermaLink="true">https://blog.binarydiver.com/articles/2024/09/25/appearance-feature-from-wikipedia</guid>
+            <dc:creator><![CDATA[Jason Park]]></dc:creator>
+            <pubDate>Mon, 07 Oct 2024 11:50:00 GMT</pubDate>
+        </item>
         <item>
             <title><![CDATA[Next.js로 GitHub Page에 블로그 개설하기]]></title>
             <description><![CDATA[Next.js로 정적 웹사이트를 추출하여 GitHub Page 위에서 운영할 수 있는 블로그를 개설한 과정에 대한 이야기이다.]]></description>
             <link>https://blog.binarydiver.com/articles/2024/09/24/build-blog-with-nextjs-on-github</link>
             <guid isPermaLink="true">https://blog.binarydiver.com/articles/2024/09/24/build-blog-with-nextjs-on-github</guid>
             <dc:creator><![CDATA[Jason Park]]></dc:creator>
-            <pubDate>Tue, 24 Sep 2024 08:40:00 GMT</pubDate>
+            <pubDate>Fri, 04 Oct 2024 08:30:00 GMT</pubDate>
         </item>
     </channel>
 </rss>
