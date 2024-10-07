@@ -4,7 +4,7 @@ title: Next.js로 GitHub Page에 블로그 개설하기
 description: Next.js로 정적 웹사이트를 추출하여 GitHub Page 위에서 운영할 수 있는 블로그를 개설한 과정에 대한 이야기이다.
 keywords: ['next.js', 'blog', 'markdoc']
 writtenAt: '2024-09-24 17:40'
-updatedAt: '2024-09-24 17:40'
+updatedAt: '2024-10-04 17:30'
 ---
 
 # Next.js로 GitHub Page에 블로그 개설하기
@@ -26,7 +26,7 @@ updatedAt: '2024-09-24 17:40'
 
 그래서 추가적인 재화의 소모도 없고 오직 프로그래밍 능력만으로 1 ~ 5번을 대체로 만족할 수 있는 방법으로 GitHub Page를 이용하기로 결정했다. 과거에는 Jekyll를 이용해서 정적 사이트를 만들어 GitHub Page에 올리는 것이 많이 사용되는 방식이었다. 하지만 리액트 바람이 불어온 뒤 격변의 시간이 지난 웹 시장에는 정적 웹사이트를 추출할 수 있는 라이브러리들이 훨씬 더 많아졌다.
 
-내가 현재 가장 익숙한 정적 웹사이트 제작 프레임워크는 Next.js 였고 이를 이용해서 개발하기로 했다.
+내가 현재 가장 익숙한 정적 웹사이트 제작 프레임워크는 Next.js였고 이를 이용해서 개발하기로 했다.
 
 ## 개발 과정
 
@@ -34,7 +34,7 @@ Next.js 14.2.x 기준으로 개발하였다.\
 다음 [CLI](https://nextjs.org/docs/pages/api-reference/cli/create-next-app)로 Next.js 프로젝트를 생성한다.
 
 ```bash
-pnpm create next-app nextjs-blog --ts --tailwind --eslint --no-app --no-src-dir --import-alias "@/*" --use-pnpm
+pnpm create next-app nextjs-blog --ts --tailwind --eslint --no-app --src-dir --import-alias "@/*" --use-pnpm
 ```
 
 ### 프로젝트 구조
@@ -109,6 +109,7 @@ const nextConfig = {
 나는 "articles/{year}/{month}/{day}/{file_name.md}" 같은 패턴으로 마크다운 문서들을 생성했다.
 Markdoc은 마크다운에 [frontmatter](https://markdoc.dev/docs/frontmatter)라는 페이지 레벨의 메타데이터 기록을 지원한다.
 이를 활용하기 위해 마크다운 문서 처음에 `---` 구분자로 필요한 정보를 나열했다.
+string으로 받기 위해서는 ""로 감싸야 하며 그렇지 않으면 날짜와 같은 특정 서식은 자동 파싱된다.
 
 ```
 ---
@@ -156,7 +157,7 @@ type HomeProps = {
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const ARTICLES_DIR = path.join(process.cwd(), 'pages');
   const articlesPaths = await FastGlob.glob(
-    ['articles/**/*.md', '!articles/_draft/*'],
+    ['articles/**/*.md', '!articles/_draft/*'], // _draft 폴더 내 문서는 노출하지 않음.
     {
       cwd: ARTICLES_DIR,
       dot: false,
@@ -249,7 +250,7 @@ const Home = (props: HomeProps) => {
 ### 스타일링
 
 하지만 tailwindcss를 적용한 프로젝트는 기본 서식이 없어 마크다운 렌더링에 스타일이 적용되어 있지 않다.
-서식을 직접 수동으로 지정하거나 편의 상 미리 지정된 서식의 [@tailwindcss/typography](https://github.com/tailwindlabs/tailwindcss-typography) 플러그인을 쓰면 된다.
+서식을 직접 수동으로 지정하거나 미리 지정된 서식의 [@tailwindcss/typography](https://github.com/tailwindlabs/tailwindcss-typography) 플러그인을 쓰면 된다.
 
 ```bash
 pnpm add @tailwindcss/typography --save-dev
@@ -292,9 +293,9 @@ pnpm add prismjs
 pnpm add @types/prismjs --save-dev
 ```
 
-Markdoc은 마크다운에서 이용하는 문법 요소들을 [Nodes](https://markdoc.dev/docs/nodes)라고 부르며 각각 커스토마이징이 가능하다.
+Markdoc은 마크다운에서 이용하는 문법 요소들을 [Nodes](https://markdoc.dev/docs/nodes)라고 부르며 각각 커스터마이징이 가능하다.
 이를 위해 Markdoc schema를 정의해야 하는데 구조는 [여기](https://markdoc.dev/docs/nextjs#schema-customization)서 확인할 수 있다.
-코드 블락 내 소스 코드에 해당되는 언어들을 각각 임포트해줘야 한다.
+문법 강조를 위해 코드 블락 내 소스 코드에 해당되는 언어들을 각각 임포트해줘야 한다.
 커스텀 코드 블락을 만들고 이를 Markdoc에 코드 블락을 의미하는 fence node에 연결한다.
 
 ```jsx
@@ -346,8 +347,8 @@ export const fence = {
 
 ### 라이트 / 다크 테마
 
-이 프로젝트는 tailwindcss에서 다크 모드를 수동으로 지정하는 방법 중에 selector를 이용했다.
-이는 `<html class="dark">`와 같이 dark 클래스가 지정되면 하위 엘레먼트들의 `dark:` 가 붙는 모든 클래스들이 활성화되는 방식이다.
+tailwindcss에서 다크 모드를 수동으로 지정하는 방법 중에 selector를 이용했다.
+이는 `<html class="dark">`와 같이 dark 클래스가 지정되면 하위 엘레먼트들의 `dark:`가 붙는 모든 클래스들이 활성화되는 방식이다.
 
 ```ts
 // src: [tailwind.config.ts](https://github.com/binarydiver/template-nextjs-blog/blob/v1.0.0/tailwind.config.ts)
@@ -365,7 +366,7 @@ export default {
 if (
   localStorage.getItem('color-theme') === 'dark' ||
   (!('color-theme' in localStorage) &&
-    window.matchMedia('(prefers-color-scheme: dark)').matches)
+    window.matchMedia('(prefers-color-scheme: dark)').matches) // system theme
 ) {
   document.documentElement.classList.add('dark');
   localStorage.setItem('color-theme', 'dark');
@@ -376,7 +377,7 @@ if (
 ```
 
 이제 스크립트를 `_document.tsx`에서 호출하도록 불러온다.
-위 스크립트가 다른 Next.js 모듈보다 먼저 호출되도록 strategy를 지정했다.
+위 스크립트가 다른 Next.js 모듈보다 먼저 호출되도록 strategy를 지정한다.
 커스텀 도메인을 사용하지 않으면 `...github.io/template-nextjs-blog/` 와 같이 뒤에 저장소 이름이 항상 붙어야 한다.
 따라서 로컬에서 실행할 때는 저장소 이름이 없이, 배포 시에는 저장소 이름이 붙도록 조건을 붙여야 리소스를 받아오는데 문제가 없다.
 
@@ -706,7 +707,7 @@ pnpm add gh-pages --save-dev
 
 ## Troubleshooting
 
-- 도메인 관리를 cloudflare로 할 때 custom domain 연결 후 접속 시 `too many request ...` 에러가 발생한다면, dns proxy를 끄거나 https 옵션을 full(strict)로 변경해야 한다.\
+- 도메인 관리를 cloudflare로 할 때 custom domain 연결 후 접속 시 `too many request ...` 에러가 발생한다면, dns proxy를 끄거나 https 옵션을 full(strict)로 변경해야 한다.
   > ref. [Fix “Too many redirects” error after enabling Cloudflare Proxy](https://medium.com/@flaviocopes/fix-too-many-redirects-error-after-enabling-cloudflare-proxy-7fb94fe98989)
 
 ## To-Do
