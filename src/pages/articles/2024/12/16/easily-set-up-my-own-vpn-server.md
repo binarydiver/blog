@@ -22,7 +22,7 @@ updatedAt: '2024-12-16 22:00'
 Outline은 Manager, Client로 나뉘어지는데 Manager는 VPN 관리 프로그램이라 생각하면 된다.
 
 맥용 프로그램을 받아 실행하면 다음과 같은 화면을 볼 수 있다.
-![Outline Manager](../screenshot-2412161740.png)
+{% image src="screenshot-2412161740.png" width=512 alt="Outline Manager" /%}
 
 여기서 서버를 구축할 클라우드 서비스를 정해야 한다. 저렴하게 사용한다면 선택지는 Digital Ocean, Vultr, AWS 정도이다.\
 [Digital Ocean](https://www.digitalocean.com/)은 저렴하고 서비스 경험도 괜찮지만 한국, 일본, 홍콩에 데이터 센터가 없다.\
@@ -32,24 +32,24 @@ Outline은 Manager, Client로 나뉘어지는데 Manager는 VPN 관리 프로그
 
 나는 EC2 인스턴스에 서버를 구축하기로 했기 때문에 "Set up Outline anywhere" 메뉴를 선택했다.\
 그러면 다음 화면처럼 설치 커맨드가 출력된다.
-![Outline Manager](../screenshot-2412162023.png)
+{% image src="screenshot-2412162023.png" width=512 alt="Outline Manager" /%}
 
 EC2 인스턴스를 AWS Linux로 설치한 경우 베이스가 CentOS 인데 설치 커맨드를 실행하면 도커 엔진 설치 실패가 출력될 것이다. 이 문제를 해결하려면 도커 엔진을 별도로 설치하는 등 번거로운 절차를 거쳐야 한다.
 
 그래서 나는 데비안 리눅스를 설치하고 설치 커맨드를 실행했다. 설치가 완료되면 다음과 같이 출력된 녹색으로 보이는 텍스트를 Manager에 붙여넣으면 된다.
-![Result of installation](../screenshot-2411191702.png)
+{% image src="screenshot-2411191702.png" width=700 alt="Result of installation" /%}
 
 본래 별도 서버에 설치를 하면 내부 방화벽에 지정된 포트를 허용하는 과정을 거쳐야 한다. 데비안에서는 `ufw status` 로 현재 방화벽 상태를 볼 수 있고, `ufw allow 12003/tcp`와 같이 포트를 허용하고, `ufw reload`로 변경 사항을 적용할 수 있다. 하지만, AWS에서 EC2로 서버를 구축했다면 기본으로 인스턴스 내부 방화벽은 작동하지 않는다.
 
 AWS에서는 다음과 같이 EC2 인스턴스가 속한 Security Group에서 inbound rule로 추가해줘야 한다. VPN를 이용할 때 서버의 IP는 노출되기 때문에 최선의 보안을 위해 SSH 접근은 자신이 접속하는 위치의 IP만 허용하는 것을 권한다.
-![AWS, Security Group](../screenshot-2412162051.png)
+{% image src="screenshot-2412162051.png" width=800 alt="AWS, Security Group" /%}
 
 방화벽을 넘어 Manager가 정상적으로 서버에 접속하면 다음처럼 접근 키, 데이터 사용량 관리 화면이 나온다.
-![Accessed manager to VPN server](../screenshot-241216204303.png)
+{% image src="screenshot-241216204303.png" width=512 alt="Accessed manager to VPN server" /%}
 
 여러명이 하나의 VPN 서버를 사용한다면 여기서 Key를 추가해서 공유해주면 된다. 그렇게 공유받은 키를 클라이언트에서 넣고 접속하면 바로 VPN을 경유할 수 있게 된다.\
 또한 세팅에서 키마다 데이터 이용 제한을 지정할 수도 있다. 지원하는 클라이언트는 안드로이드, 윈도우즈, iOS, MacOS, Linux로 주요한 플랫폼은 모두 가능하다.
-![Outline Client](../screenshot-2412162139.png)
+{% image src="screenshot-2412162139.png" width=400 alt="Outline Client" /%}
 
 키 값을 넣고 접속한 후 [Show IP](https://showip.net/)와 같은 사이트를 통해 현재 접속 아이피와 위치를 확인할 수 있다.\
 내 로컬 라우터 주소가 아닌 서버 주소가 뜨고 위치가 다른 지역이라면 성공한 것이다.
