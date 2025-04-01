@@ -4,7 +4,7 @@ title: 손쉽게 나만의 VPN 서버 만들기
 description: AWS EC2에 Outline을 설치하여 쉽게 VPN 서버를 만든 과정에 대한 이야기이다.
 keywords: ['vpn', 'outline', 'aws']
 writtenAt: '2024-12-01 11:00'
-updatedAt: '2024-12-16 22:00'
+updatedAt: '2025-04-01 16:00'
 ---
 
 # 손쉽게 나만의 VPN 서버 만들기
@@ -66,3 +66,58 @@ AWS에서는 다음과 같이 EC2 인스턴스가 속한 Security Group에서 in
 Tor로 불편함을 느낀다면 여러 지역에 별도의 데디케이트 서버를 두고 [multi-hop routing](https://www.comparitech.com/blog/vpn-privacy/multi-hop-vpn/)을 하는 등 더 복잡한 방법을 강구해야 할 것이다.
 
 하지만 그 정도 익명성을 원하는 사람은 [애드워드 스노우든](https://ko.wikipedia.org/wiki/%EC%97%90%EB%93%9C%EC%9B%8C%EB%93%9C_%EC%8A%A4%EB%85%B8%EB%93%A0)와 같이 기밀을 알고 있는 자이거나 [Cyber Crimes](https://www.fbi.gov/wanted/cyber)에 게시된 인물들이 아닐까...
+
+---
+
+2025-04-01, 추가
+
+위 방식으로 구성해서 사용하면 IP 주소 변동 때문에 불편한 점이 생긴다.
+AWS가 제공하는 Elastic IP를 붙이면 인스턴스가 재구동하더라도 고정된 IP 주소를 이용할 수 있다.\
+하지만 여기에는 두 가지 문제가 있다.
+
+1. 적은 비용이지만 Elastic IP 사용료를 지불해야 한다.
+2. IP를 고정하면 VPN을 사용하더라도 시간에 따른 행동 패턴은 특정될 수 있다.
+
+이상적인 상황은 인스턴스를 재구동할 때마다 IP가 변경되므로 그에 따라 변경된 IP로 VPN을 이용하는 것이다.
+하지만 Outline VPN은 아직 IP 변경에 대한 별도의 API를 지원하지 않는다.
+따라서 인스턴스가 재구동될 때마다 자신의 IP를 받아와서 Outline VPN의 설정을 변경할 필요가 있다.
+EC2 인스턴스는 내부에서 인스턴스 메타데이터에 접근하는 방법이 있다.
+AWS 문서에 따라 다음 스크립트로 자신의 IP 주소를 얻을 수 있다.
+
+```bash
+# src: [Access instance metadata from within an EC2 instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-data-retrieval.html#instancedata-inside-access)
+TOKEN=`curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" -s`
+
+IP=`curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/public-ipv4 -s`
+```
+
+그리고 Outline VPN은 인스턴스 내에서 도커 컨테이너로 실행되지만 외부 볼륨을 이용해서 설정 정보를 불러온다.\
+`/opt/outline/persisted-state/shadowbox_config.json` 파일이 그 대상이다.\
+그리고 Outline Manager에 등록할 때 필요한 정보는 `/opt/outline/access.txt` 에 저장된다.\
+이 모두를 인스턴스가 재구동될 때마다 IP 주소를 교체해주는 스크립트를 다음과 같이 구현하면 된다.
+
+```
+#! /bin/bash
+
+TOKEN=`curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" -s`
+
+IP=`curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/public-ipv4 -s`
+
+# echo $IP
+
+PATH_OUTLINE_ROOT="/opt/outline"
+
+sed -E "s/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/$IP/g" "$PATH_OUTLINE_ROOT/access.txt" > "$PATH_OUTLINE_ROOT/access.txt.bk" && mv -f "$PATH_OUTLINE_ROOT/access.txt.bk" "$PATH_OUTLINE_ROOT/access.txt"
+
+# cat "$PATH_OUTLINE_ROOT/access.txt"
+
+PATH_OUTLINE_CONFIG="$PATH_OUTLINE_ROOT/persisted-state"
+
+sed -E "s/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/$IP/g" "$PATH_OUTLINE_CONFIG/shadowbox_server_config.json" > "$PATH_OUTLINE_CONFIG/shadowbox_server_config.json.bk" && mv -f "$PATH_OUTLINE_CONFIG/shadowbox_server_config.json.bk" "$PATH_OUTLINE_CONFIG/shadowbox_server_config.json"
+
+# cat "$PATH_OUTLINE_CONFIG/shadowbox_server_config.json"
+```
+
+EC2 인스턴스의 경우 `/var/lib/cloud/scripts/per-boot/` 내에 `outline_update.sh` 와 같이 저장해주면 매번 재구동 시 스크립트를 실행한다.
+
+IP 주소만 변경하면 되니까 Key 값을 저장해두었다가 재구동 후 VPN 접속 시 바뀐 IP로 등록해서 접근하면 매번 새로운 IP로 VPN을 이용할 수 있다.
