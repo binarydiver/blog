@@ -27,7 +27,8 @@ const CodeBlock: FC<CodeBlockProps> = props => {
       const brIndex = children.indexOf('\n');
       const firstLine = children.slice(0, brIndex);
       const mark = '// src: ';
-      if (firstLine.startsWith(mark)) {
+      const markBash = '# src: ';
+      if (firstLine.startsWith(mark) || firstLine.startsWith(markBash)) {
         const match = firstLine.match(/\[(.+)\]\((.+)\)/);
         if (match && match.length === 3) {
           childrenClone = children.slice(brIndex + 1);
