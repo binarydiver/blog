@@ -15,9 +15,12 @@
     },
     {
       "name": "Next.js: debug full stack",
-      "type": "node-terminal",
       "request": "launch",
-      "command": "npm run dev",
+      "runtimeArgs": ["dev"],
+      "runtimeExecutable": "pnpm",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node",
+      "internalConsoleOptions": "openOnSessionStart",
       "resolveSourceMapLocations": [
         "${workspaceFolder}/**",
         "!**/node_modules/**",
