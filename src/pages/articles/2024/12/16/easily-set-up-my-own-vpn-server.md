@@ -4,7 +4,7 @@ title: 손쉽게 나만의 VPN 서버 만들기
 description: AWS EC2에 Outline을 설치하여 쉽게 VPN 서버를 만든 과정에 대한 이야기이다.
 keywords: ['vpn', 'outline', 'aws']
 writtenAt: '2024-12-01 11:00'
-updatedAt: '2025-04-01 16:00'
+updatedAt: '2025-04-22 11:00'
 ---
 
 # 손쉽게 나만의 VPN 서버 만들기
@@ -19,7 +19,7 @@ updatedAt: '2025-04-01 16:00'
 
 나는 멀티 플랫폼을 지원하면서 신뢰할 수 있는 VPN 서비스를 쉽게 구축할 수 있는 솔루션으로 [Outline VPN](https://getoutline.org/)을 알게 되었다. Outline VPN은 구글 산하의 [Jigsaw](https://jigsaw.google.com/)라는 팀에 의해 개발되었다. 또한 이 프로젝트는 오픈 소스로서 2018, 2022, 2024년에 외부 업체로부터 보안 감사도 받았다고 명시되어 있다.
 
-Outline은 Manager, Client로 나뉘어지는데 Manager는 VPN 관리 프로그램이라 생각하면 된다.
+Outline은 Manager, Client 프로그램으로 나뉘어지는데 Manager는 VPN 관리 프로그램이라 생각하면 된다.
 
 맥용 프로그램을 받아 실행하면 다음과 같은 화면을 볼 수 있다.
 {% image src="screenshot-2412161740.png" width=512 alt="Outline Manager" /%}
@@ -34,14 +34,14 @@ Outline은 Manager, Client로 나뉘어지는데 Manager는 VPN 관리 프로그
 그러면 다음 화면처럼 설치 커맨드가 출력된다.
 {% image src="screenshot-2412162023.png" width=512 alt="Outline Manager" /%}
 
-EC2 인스턴스를 AWS Linux로 설치한 경우 베이스가 CentOS 인데 설치 커맨드를 실행하면 도커 엔진 설치 실패가 출력될 것이다. 이 문제를 해결하려면 도커 엔진을 별도로 설치하는 등 번거로운 절차를 거쳐야 한다.
+EC2 인스턴스를 AWS Linux로 설치한 경우 베이스가 CentOS 인데 설치 커맨드를 실행하면 도커 엔진 설치 실패가 출력될 것이다. ~~이 문제를 해결하려면 도커 엔진을 별도로 설치하는 등 번거로운 절차를 거쳐야 한다.~~ AWS Linux 인 경우 `sudo yum install docker -y` 로 도커를 수동 설치한 후 다시 위의 설치 커맨드를 실행하면 된다.
 
-그래서 나는 데비안 리눅스를 설치하고 설치 커맨드를 실행했다. 설치가 완료되면 다음과 같이 출력된 녹색으로 보이는 텍스트를 Manager에 붙여넣으면 된다.
+나는 데비안 리눅스를 설치하고 설치 커맨드를 실행했다. 설치가 완료되면 다음과 같이 출력된 녹색으로 보이는 텍스트를 Manager에 붙여넣으면 된다.
 {% image src="screenshot-2411191702.png" width=700 alt="Result of installation" /%}
 
-본래 별도 서버에 설치를 하면 내부 방화벽에 지정된 포트를 허용하는 과정을 거쳐야 한다. 데비안에서는 `ufw status` 로 현재 방화벽 상태를 볼 수 있고, `ufw allow 12003/tcp`와 같이 포트를 허용하고, `ufw reload`로 변경 사항을 적용할 수 있다. 하지만, AWS에서 EC2로 서버를 구축했다면 기본으로 인스턴스 내부 방화벽은 작동하지 않는다.
+본래 별도 서버에 설치를 하면 내부 방화벽에 지정된 포트를 허용하는 과정을 거쳐야 한다. 데비안에서는 `ufw status` 로 현재 방화벽 상태를 볼 수 있고, `ufw allow 12003/tcp`와 같이 포트를 허용하고, `ufw reload`로 변경 사항을 적용할 수 있다. 하지만, AWS에서 EC2로 서버를 구축했다면 기본으로 인스턴스 내부 방화벽은 작동하지 않으므로 신경쓰지 않아도 된다.
 
-AWS에서는 다음과 같이 EC2 인스턴스가 속한 Security Group에서 inbound rule로 추가해줘야 한다. VPN를 이용할 때 서버의 IP는 노출되기 때문에 최선의 보안을 위해 SSH 접근은 자신이 접속하는 위치의 IP만 허용하는 것을 권한다.
+출력된 포트 번호를 다음과 같이 EC2 인스턴스가 속한 Security Group의 inbound rule에 추가해줘야 한다. VPN를 이용할 때 서버의 IP는 노출되기 때문에 최선의 보안을 위해 SSH 접근은 자신이 접속하는 위치의 IP만 허용하는 것을 권한다.
 {% image src="screenshot-2412162051.png" width=800 alt="AWS, Security Group" /%}
 
 방화벽을 넘어 Manager가 정상적으로 서버에 접속하면 다음처럼 접근 키, 데이터 사용량 관리 화면이 나온다.
@@ -51,7 +51,7 @@ AWS에서는 다음과 같이 EC2 인스턴스가 속한 Security Group에서 in
 또한 세팅에서 키마다 데이터 이용 제한을 지정할 수도 있다. 지원하는 클라이언트는 안드로이드, 윈도우즈, iOS, MacOS, Linux로 주요한 플랫폼은 모두 가능하다.
 {% image src="screenshot-2412162139.png" width=400 alt="Outline Client" /%}
 
-키 값을 넣고 접속한 후 [Show IP](https://showip.net/)와 같은 사이트를 통해 현재 접속 아이피와 위치를 확인할 수 있다.\
+클라이언트 프로그램을 열어 키 값을 넣고 접속한 후 [Show IP](https://showip.net/)와 같은 사이트를 통해 현재 접속 아이피와 위치를 확인할 수 있다.\
 내 로컬 라우터 주소가 아닌 서버 주소가 뜨고 위치가 다른 지역이라면 성공한 것이다.
 
 좀 더 고찰해보면 완전한 익명성을 위해서는 심도있는 고민을 해야 할 수 있다.
@@ -82,7 +82,7 @@ AWS가 제공하는 Elastic IP를 붙이면 인스턴스가 재구동하더라�
 하지만 Outline VPN은 아직 IP 변경에 대한 별도의 API를 지원하지 않는다.
 따라서 인스턴스가 재구동될 때마다 자신의 IP를 받아와서 Outline VPN의 설정을 변경할 필요가 있다.
 EC2 인스턴스는 내부에서 인스턴스 메타데이터에 접근하는 방법이 있다.
-AWS 문서에 따라 다음 스크립트로 자신의 IP 주소를 얻을 수 있다.
+AWS 문서에 따라 다음 스크립트로 인스턴스 자신의 IP 주소를 얻을 수 있다.
 
 ```bash
 # src: [Access instance metadata from within an EC2 instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-data-retrieval.html#instancedata-inside-access)
@@ -96,7 +96,7 @@ IP=`curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/met
 그리고 Outline Manager에 등록할 때 필요한 정보는 `/opt/outline/access.txt` 에 저장된다.\
 이 모두를 인스턴스가 재구동될 때마다 IP 주소를 교체해주는 스크립트를 다음과 같이 구현하면 된다.
 
-```
+```bash
 #! /bin/bash
 
 TOKEN=`curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" -s`
@@ -120,4 +120,4 @@ sed -E "s/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/$IP/g" "$PATH_OUTLINE_C
 
 EC2 인스턴스의 경우 `/var/lib/cloud/scripts/per-boot/` 내에 `outline_update.sh` 와 같이 저장해주면 매번 재구동 시 스크립트를 실행한다.
 
-IP 주소만 변경하면 되니까 Key 값을 저장해두었다가 재구동 후 VPN 접속 시 바뀐 IP로 등록해서 접근하면 매번 새로운 IP로 VPN을 이용할 수 있다.
+IP 주소만 변경하면 되니까 Key 값을 템플릿으로 텍스트 파일로 저장해두었다가 재구동 후 VPN 접속 시 기존 서버 정보를 삭제하고 바뀐 IP를 수정해서 다시 서버를 추가하면 매번 새로운 IP로 VPN을 이용할 수 있다.
